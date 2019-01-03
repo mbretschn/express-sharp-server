@@ -1,7 +1,7 @@
 {
   "name": "express-sharp-server",
   "version": "0.0.1",
-  "description": "",
+  "description": "express-sharp-server is a middleware that implements a restful image server based on node-sharp",
   "main": "index.js",
   "files": [
     "index.js",
@@ -9,7 +9,7 @@
   ],
   "author": "Marcel Bretschneider <info@3epnm.de>",
   "homepage": "https://github.com/3epnm/express-sharp-server",
-  "license": "",
+  "license": "Apache-2.0",
   "dependencies": {
     "express": "^4.16.4",
     "json5": "^2.1.0",
