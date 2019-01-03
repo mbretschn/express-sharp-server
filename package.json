@@ -1,6 +1,6 @@
 {
   "name": "express-sharp-server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "express-sharp-server is a middleware that implements a restful image server based on node-sharp",
   "main": "index.js",
   "files": [
