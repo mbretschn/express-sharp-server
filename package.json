@@ -1,0 +1,32 @@
+{
+  "name": "express-sharp-server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "lib/"
+  ],
+  "author": "Marcel Bretschneider <info@3epnm.de>",
+  "homepage": "https://github.com/3epnm/express-sharp-server",
+  "license": "",
+  "dependencies": {
+    "express": "^4.16.4",
+    "json5": "^2.1.0",
+    "jsonfile": "^5.0.0",
+    "mathjs": "^5.3.1",
+    "moment": "^2.22.2",
+    "multer": "^1.4.1",
+    "sharp": "^0.21.0",
+    "underscore": "^1.9.1",
+    "uuid": "^3.3.2",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5",
+    "minimist": "^1.2.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/3epnm/express-sharp-server"
+  }
+}
