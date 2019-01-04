@@ -15,18 +15,27 @@
     "json5": "^2.1.0",
     "jsonfile": "^5.0.0",
     "mathjs": "^5.3.1",
+    "minimist": "^1.2.0",
     "moment": "^2.22.2",
     "multer": "^1.4.1",
-    "sharp": "^0.21.0",
-    "underscore": "^1.9.1",
-    "uuid": "^3.3.2",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
-    "minimist": "^1.2.0"
+    "rimraf": "^2.6.3",
+    "sharp": "^0.21.0",
+    "underscore": "^1.9.1",
+    "uuid": "^3.3.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "mocha": "^5.2.0"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/3epnm/express-sharp-server"
+  },
+  "scripts": {
+    "start": "SET NODE_ENV=dev && node test/server.js",
+    "test": "mocha tests/unit --timeout 10000"
   }
 }
