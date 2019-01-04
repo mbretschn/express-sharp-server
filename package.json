@@ -45,7 +45,7 @@
   "nyc": {
     "exclude": [
       "tests",
-      "**/*.spec.js" 
+      "**/*.spec.js"
     ]
   }
 }

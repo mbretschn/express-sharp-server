@@ -58,6 +58,26 @@ let fingerprints = [
         'file': path.join(__dirname, 'elefants-widthheight.jpg'),
         'name': 'widthheight',
         'query': 'width=400&height=200'
+    },
+    {
+        'file': path.join(__dirname, 'elefants-extend-topleft.jpg'),
+        'name': 'extend-topleft',
+        'query': 'polygon=[{x:-58,y:-54},{x:397,y:-54},{x:397,y:420},{x:-58,y:420}]'
+    },
+    {
+        'file': path.join(__dirname, 'elefants-extend-topleft-rotation.jpg'),
+        'name': 'extend-topleft-rotation',
+        'query': 'polygon=[{x:-279,y:52},{x:16,y:-295},{x:377,y:12},{x:82,y:359}]&rotation=49.66'
+    },
+    {
+        'file': path.join(__dirname, 'elefants-extend-bottomright.jpg'),
+        'name': 'extend-bottomright',
+        'query': 'polygon=[{x:796,y:396},{x:1251,y:396},{x:1251,y:870},{x:796,y:870}]'
+    },
+    {
+        'file': path.join(__dirname, 'elefants-extend-bottomright-rotation.jpg'),
+        'name': 'extend-bottomright-rotation',
+        'query': 'polygon=[{x:695,y:652},{x:990,y:305},{x:1351,y:612},{x:1056,y:959}]&rotation=49.66'
     }
 ];
 

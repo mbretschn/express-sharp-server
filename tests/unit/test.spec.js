@@ -236,4 +236,56 @@ describe('Image Resource', function () {
                 });
             });
     });
+
+    it('GET image extend top & left', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[7].query)
+            .end((err, res) => {
+                res.should.have.status(200);
+
+                fingerprint(res.body, (err, info) => {
+                    chai.expect(info).to.equal(fingerprints[7].chksum);
+                    done();
+                });
+            });
+    });
+
+    it('GET image extend top & left & rotation', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[8].query)
+            .end((err, res) => {
+                res.should.have.status(200);
+
+                fingerprint(res.body, (err, info) => {
+                    chai.expect(info).to.equal(fingerprints[8].chksum);
+                    done();
+                });
+            });
+    });
+
+    it('GET image extend bottom & right', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[9].query)
+            .end((err, res) => {
+                res.should.have.status(200);
+
+                fingerprint(res.body, (err, info) => {
+                    chai.expect(info).to.equal(fingerprints[9].chksum);
+                    done();
+                });
+            });
+    });
+
+    it('GET image extend bottom & right & rotate', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[10].query)
+            .end((err, res) => {
+                res.should.have.status(200);
+
+                fingerprint(res.body, (err, info) => {
+                    chai.expect(info).to.equal(fingerprints[10].chksum);
+                    done();
+                });
+            });
+    });
 });
