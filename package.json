@@ -41,7 +41,8 @@
   },
   "scripts": {
     "start": "SET NODE_ENV=dev && node test/server.js",
-    "test": "nyc mocha --exit tests/unit && nyc report --reporter=text-lcov | coveralls"
+    "test": "mocha --exit tests/unit",
+    "test-ci": "nyc mocha --exit tests/unit && nyc report --reporter=text-lcov | coveralls"
   },
   "nyc": {
     "exclude": [
