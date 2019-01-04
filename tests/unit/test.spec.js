@@ -30,8 +30,13 @@ chai.use(chaiHttp);
 let { fingerprints, fingerprint } = require('../fixtures');
 
 describe('Image Resource', function () {
-    let href = '';
-    let payload;
+    let href = '', userdata = {
+        "license": {
+            "label": "CC BY-SA 4.0",
+            "href": "https://creativecommons.org/licenses/by-sa/4.0",
+            "attribution": "Ggerdel at Wikimedia Commons"
+        }
+    }
 
     before(function (done) {
         mkdirp.sync(path.join(__dirname, '..', 'data', 'uploads'));
@@ -95,25 +100,53 @@ describe('Image Resource', function () {
                 res.body.should.have.property('metadata');
                 res.body.metadata.should.have.property('width').eql(1200);
                 res.body.metadata.should.have.property('height').eql(800);
+                done();
+            });  
+    });
+
+    it('PUT image userdata', function (done) {
+        chai.request(server)
+            .put(href)
+            .set('Content-Type', 'application/json')
+            .send({ userdata: userdata })
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
+
+                done();
+            });
+    });
+
+    it('GET image userdata', function (done) {
+        chai.request(server)
+            .get(href)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
 
                 done();
             });  
     });
 
     it('POST image origin', function (done) {
-        payload = {
+        let payload = {
             "_links": {
                 "origin": {
                     "href": "http://localhost:61235" + href
                 }
             },
-            "userdata": {
-                "license": {
-                    "label": "CC BY-SA 4.0",
-                    "href": "https://creativecommons.org/licenses/by-sa/4.0",
-                    "attribution": "Ggerdel at Wikimedia Commons"
-                }
-            }
+            "userdata": userdata
         };
 
         chai.request(server)
@@ -130,9 +163,9 @@ describe('Image Resource', function () {
 
                 res.body.should.have.property('userdata');
                 res.body.userdata.should.have.property('license');
-                res.body.userdata.license.should.have.property('label').eql(payload.userdata.license.label);
-                res.body.userdata.license.should.have.property('href').eql(payload.userdata.license.href);
-                res.body.userdata.license.should.have.property('attribution').eql(payload.userdata.license.attribution);  
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
 
                 href = res.body._links.self.href;
                 done();
@@ -166,9 +199,9 @@ describe('Image Resource', function () {
                 res.body.metadata.should.have.property('height').eql(800);
                 res.body.should.have.property('userdata');
                 res.body.userdata.should.have.property('license');
-                res.body.userdata.license.should.have.property('label').eql(payload.userdata.license.label);
-                res.body.userdata.license.should.have.property('href').eql(payload.userdata.license.href);
-                res.body.userdata.license.should.have.property('attribution').eql(payload.userdata.license.attribution);  
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
                 done();
             });    
     });
@@ -198,9 +231,9 @@ describe('Image Resource', function () {
                 res.body.metadata.should.have.property('height').eql(189);
                 res.body.should.have.property('userdata');
                 res.body.userdata.should.have.property('license');
-                res.body.userdata.license.should.have.property('label').eql(payload.userdata.license.label);
-                res.body.userdata.license.should.have.property('href').eql(payload.userdata.license.href);
-                res.body.userdata.license.should.have.property('attribution').eql(payload.userdata.license.attribution);  
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
                 done();
             });    
     });
@@ -218,6 +251,25 @@ describe('Image Resource', function () {
             });
     });
 
+    it('GET image extraction rotation info', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[2].query)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('metadata');
+                res.body.metadata.should.have.property('width').eql(219);
+                res.body.metadata.should.have.property('height').eql(179);
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
+                done();
+            });    
+    });
+
     it('GET image extraction polygon', function (done) {
         chai.request(server)
             .get(href + '?' + fingerprints[3].query)
@@ -229,6 +281,25 @@ describe('Image Resource', function () {
                     done();
                 });
             });
+    });
+
+    it('GET image extraction polygon info', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[3].query)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('metadata');
+                res.body.metadata.should.have.property('width').eql(315);
+                res.body.metadata.should.have.property('height').eql(182);
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
+                done();
+            });    
     });
 
     it('GET image width', function (done) {
@@ -244,6 +315,25 @@ describe('Image Resource', function () {
             });
     });
 
+    it('GET image width info', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[4].query)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('metadata');
+                res.body.metadata.should.have.property('width').eql(400);
+                res.body.metadata.should.have.property('height').eql(267);
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
+                done();
+            });    
+    });
+
     it('GET image height', function (done) {
         chai.request(server)
             .get(href + '?' + fingerprints[5].query)
@@ -255,6 +345,25 @@ describe('Image Resource', function () {
                     done();
                 });
             });
+    });
+
+    it('GET image height info', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[5].query)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('metadata');
+                res.body.metadata.should.have.property('width').eql(300);
+                res.body.metadata.should.have.property('height').eql(200);
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
+                done();
+            });    
     });
 
     it('GET image width & height', function (done) {
@@ -270,6 +379,25 @@ describe('Image Resource', function () {
             });
     });
 
+    it('GET image width & height info', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[6].query)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('metadata');
+                res.body.metadata.should.have.property('width').eql(400);
+                res.body.metadata.should.have.property('height').eql(200);
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
+                done();
+            });    
+    });
+
     it('GET image extend top & left', function (done) {
         chai.request(server)
             .get(href + '?' + fingerprints[7].query)
@@ -281,6 +409,25 @@ describe('Image Resource', function () {
                     done();
                 });
             });
+    });
+
+    it('GET image top & left info', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[7].query)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('metadata');
+                res.body.metadata.should.have.property('width').eql(455);
+                res.body.metadata.should.have.property('height').eql(474);
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
+                done();
+            });    
     });
 
     it('GET image extend top & left & rotation', function (done) {
@@ -296,6 +443,25 @@ describe('Image Resource', function () {
             });
     });
 
+    it('GET image extend top & left & rotation info', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[8].query)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('metadata');
+                res.body.metadata.should.have.property('width').eql(455);
+                res.body.metadata.should.have.property('height').eql(474);
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
+                done();
+            });    
+    });
+
     it('GET image extend bottom & right', function (done) {
         chai.request(server)
             .get(href + '?' + fingerprints[9].query)
@@ -309,6 +475,25 @@ describe('Image Resource', function () {
             });
     });
 
+    it('GET image extend bottom & right info', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[9].query)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('metadata');
+                res.body.metadata.should.have.property('width').eql(455);
+                res.body.metadata.should.have.property('height').eql(474);
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
+                done();
+            });    
+    });
+
     it('GET image extend bottom & right & rotate', function (done) {
         chai.request(server)
             .get(href + '?' + fingerprints[10].query)
@@ -320,5 +505,24 @@ describe('Image Resource', function () {
                     done();
                 });
             });
+    });
+
+    it('GET image extend bottom & right & rotate info', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[10].query)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('metadata');
+                res.body.metadata.should.have.property('width').eql(455);
+                res.body.metadata.should.have.property('height').eql(474);
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
+                done();
+            });    
     });
 });
