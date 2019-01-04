@@ -40,11 +40,12 @@
   },
   "scripts": {
     "start": "SET NODE_ENV=dev && node test/server.js",
-    "test": "nyc mocha tests/unit && nyc report --reporter=text-lcov | coveralls"
+    "test": "nyc mocha --exit tests/unit && nyc report --reporter=text-lcov | coveralls"
   },
   "nyc": {
     "exclude": [
-      "tests"
+      "tests",
+      "**/*.spec.js" 
     ]
   }
 }
