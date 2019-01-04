@@ -7,7 +7,6 @@ const chaiHttp = require('chai-http');
 const path = require('path');
 const fs = require('fs');
 const rimraf = require('rimraf');
-const mkdirp = require('mkdirp');
 const sinon = require('sinon');
 
 const logger = sinon.fake();
@@ -39,9 +38,6 @@ describe('Image Resource', function () {
     }
 
     before(function (done) {
-        mkdirp.sync(path.join(__dirname, '..', 'data', 'uploads'));
-        mkdirp.sync(path.join(__dirname, '..', 'data', 'cache'));
-
         let cnt = 7;
         for (var i=0; i<fingerprints.length; i++) {
             (function (i) {
