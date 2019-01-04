@@ -1,14 +1,28 @@
 process.env.NODE_ENV = 'test';
 
+const express = require('express');
+const ImgSrv = require('../../index');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-
 const path = require('path');
 const fs = require('fs');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
+const sinon = require('sinon');
 
-const server = require('../server');
+const logger = sinon.fake();
+
+const options = {
+    base_route: '/',
+    base_url: '/',
+    upload_dir: path.join(__dirname, '..', 'data', 'uploads') + path.sep,
+    cache_dir: path.join(__dirname, '..', 'data', 'cache') + path.sep,
+    logger: { log: logger }
+}
+
+const server = express();
+server.use(ImgSrv(options));
+server.listen(61235);
 
 const should = chai.should();
 chai.use(chaiHttp);
@@ -170,6 +184,25 @@ describe('Image Resource', function () {
                     done();
                 });
             });
+    });
+
+    it('GET image extraction rectangle info', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[1].query)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('metadata');
+                res.body.metadata.should.have.property('width').eql(334);
+                res.body.metadata.should.have.property('height').eql(189);
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(payload.userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(payload.userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(payload.userdata.license.attribution);  
+                done();
+            });    
     });
 
     it('GET image extraction rotation', function (done) {
