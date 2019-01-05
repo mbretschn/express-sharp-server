@@ -51,7 +51,7 @@ First of all, images can be uploaded.
 curl -F "Document=@elefants.jpg" http://localhost:8080
 ```
 
-In addition, it is possible to reference an image from another server by sending a image url to the server:
+In addition, it is possible to reference an image from another server by sending a image url:
 
 ```json
 {
@@ -124,9 +124,9 @@ See [examples](docs/examples.md) for more information.
 
 ### Todos
 
-The [node-sharp](https://github.com/lovell/sharp) library offers far more useful features, than this middleware currently implements. In the future, more of its functionality will be implemented in express-sharp-server. 
+The [node-sharp](https://github.com/lovell/sharp) library has far more features, this middleware currently offers. In the future, more of its functionality will be implemented in express-sharp-server. 
 
-The Caching functionality, even if it supports worker, ist very simple and can be improved in future.
+The Caching functionality, even if it supports worker, ist very simple and need to be improved in future.
 
 Finally, there is no method to remove a image resource, or list all available resources. This is the next functionality to implement.
 
