@@ -78,7 +78,12 @@ let fingerprints = [
         'file': path.join(__dirname, 'elefants-extend-bottomright-rotation.jpg'),
         'name': 'extend-bottomright-rotation',
         'query': 'polygon=[{x:695,y:652},{x:990,y:305},{x:1351,y:612},{x:1056,y:959}]&rotation=49.66'
-    }
+    },
+    {
+        'file': path.join(__dirname, 'elefants-width-grayscale.jpg'),
+        'name': 'width-grayscale',
+        'query': 'width=400&grayscale=true'
+    }    
 ];
 
 module.exports = {
