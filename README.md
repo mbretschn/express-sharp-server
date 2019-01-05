@@ -28,7 +28,7 @@ server.use(image({
 server.listen(8080);
 ```
 
-express-sharp-server supports running in a node cluster enviroment, which improves the performance considerably. See [cluster](docs/cluster.md)
+express-sharp-server supports running in a node cluster enviroment, which improves the performance considerably. See [cluster](docs/cluster.md).
 
 ### Options
 
@@ -105,7 +105,6 @@ The underlying information on the server can be queried if in addition an "Accep
 curl --header "Accept: application/json" \
     http://localhost:8080/0c97f820639ecbbbba0255ceb7a5f962
 ```
-
 
 It is possible to store userdata to an image resource, see [userdata](docs/userdata.md).
 
