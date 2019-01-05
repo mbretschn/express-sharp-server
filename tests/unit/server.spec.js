@@ -586,4 +586,42 @@ describe('Image Resource', function () {
                 done();
             });    
     });
+
+    it('GET non existing image', function (done) {
+        chai.request(server)
+            .get(href + '!?')
+            .end((err, res) => {
+                res.should.have.status(404);
+                done();
+            });
+    });
+
+    it('GET non existing image with query', function (done) {
+        chai.request(server)
+            .get(href + '!?' + fingerprints[11].query)
+            .end((err, res) => {
+                res.should.have.status(404);
+                done();
+            });
+    });
+
+    it('GET non existing image info', function (done) {
+        chai.request(server)
+            .get(href + '!?')
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(404);
+                done();
+            });
+    });
+
+    it('GET non existing image info with query', function (done) {
+        chai.request(server)
+            .get(href + '!?' + fingerprints[11].query)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(404);
+                done();
+            });
+    });
 });
