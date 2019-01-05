@@ -38,8 +38,8 @@ describe('Image Resource', function () {
     }
 
     before(function (done) {
-        let cnt = 7;
-        for (var i=0; i<fingerprints.length; i++) {
+        let cnt = fingerprints.length; 
+        for (let i=0; i<fingerprints.length; i++) {
             (function (i) {
                 fingerprint(fingerprints[i].file, (err, info) => {
                     fingerprints[i].chksum = info;
@@ -298,6 +298,41 @@ describe('Image Resource', function () {
                 res.body.should.have.property('metadata');
                 res.body.metadata.should.have.property('width').eql(315);
                 res.body.metadata.should.have.property('height').eql(182);
+                res.body.should.have.property('userdata');
+                res.body.userdata.should.have.property('license');
+                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
+                done();
+            });    
+    });
+
+    it('GET image extraction polygon with rotation', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[12].query)
+            .end((err, res) => {
+                res.should.have.status(200);
+
+                fingerprint(res.body, (err, info) => {
+                    chai.expect(info).to.equal(fingerprints[12].chksum);
+                    done();
+                });
+            });
+    });
+
+    it('GET image extraction polygon width rotation info', function (done) {
+        chai.request(server)
+            .get(href + '?' + fingerprints[12].query)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('_links');
+                res.body._links.should.have.property('self');
+                res.body._links.self.should.have.property('href').eql(href + '?' + fingerprints[12].query);
+                res.body.should.have.property('metadata');
+                res.body.metadata.should.have.property('width').eql(346);
+                res.body.metadata.should.have.property('height').eql(244);
                 res.body.should.have.property('userdata');
                 res.body.userdata.should.have.property('license');
                 res.body.userdata.license.should.have.property('label').eql(userdata.license.label);

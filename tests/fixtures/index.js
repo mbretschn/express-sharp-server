@@ -83,7 +83,12 @@ let fingerprints = [
         'file': path.join(__dirname, 'elefants-width-grayscale.jpg'),
         'name': 'width-grayscale',
         'query': 'width=400&grayscale=true'
-    }    
+    },
+    {
+        'file': path.join(__dirname, 'elefants-polygon-rotate.jpg'),
+        'name': 'polygon-rotate',
+        'query': 'polygon=[{x:467,y:631},{x:490,y:612},{x:514,y:612},{x:541,y:594},{x:549,y:563},{x:576,y:532},{x:612,y:513},{x:647,y:506},{x:696,y:522},{x:728,y:550},{x:741,y:584},{x:739,y:603},{x:782,y:610},{x:766,y:635},{x:725,y:647},{x:704,y:652},{x:697,y:679},{x:657,y:688},{x:633,y:675},{x:571,y:653},{x:545,y:648},{x:508,y:635}]&rotation=12'
+    }
 ];
 
 module.exports = {
