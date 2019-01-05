@@ -41,7 +41,7 @@ The following options can be set:
 | data_dir      | The data_dir is used to save the upload and cache files. If upload_dir is not set, ```data_dir + '/upload/'``` is created for uploads, If cache_dir is not set, ```data_dir + '/cache/'``` is used. Mandatory, if upload_dir or cache_dir is not set.               |
 | upload_dir 	| The directory where the image uploads to be saved. Optional. |
 | cache_dir 	| The directory where the image cache to be saved. Optional.   |
-| logger 	    | optional, a instance to winston logger. Optional.                |
+| logger 	    | A instance to winston logger. Optional.                |
 
 ### Basic Usage
 
