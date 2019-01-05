@@ -8,7 +8,7 @@ The following examples are done in the following image found at Wikimedia Common
 
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0), Ggerdel at Wikimedia Commons
 
-#### Width and Height
+#### Width, Height and Grayscale
 
 Request the Image with a specific width. The aspect ratio is retained.
 ```sh
@@ -30,6 +30,14 @@ curl http://localhost:8080/0c97f820639ecbbbba0255ceb7a5f962?width=400&height=200
 ```
 
 ![width and height](../tests/fixtures/elefants-widthheight.jpg)
+
+Request the Image with a specific width and remove color.
+```sh
+curl http://localhost:8080/0c97f820639ecbbbba0255ceb7a5f962?width=400&grayscale=true
+```
+
+![width and grayscale](../tests/fixtures/elefants-width-grayscale.jpg)
+
 
 #### Extract part of image with polygon parameter
 

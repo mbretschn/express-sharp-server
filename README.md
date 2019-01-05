@@ -125,7 +125,7 @@ See [examples](docs/examples.md) for more information.
 
 ### Todos
 
-The [node-sharp](https://github.com/lovell/sharp) library offers far more useful features, than this middleware currently implements. In the future, more of its functionality will be implemented in express-sharp-server.
+The [node-sharp](https://github.com/lovell/sharp) library offers far more useful features, than this middleware currently implements. In the future, more of its functionality will be implemented in express-sharp-server. 
 
 The Caching functionality, even if it supports worker, ist very simple and can be improved in future.
 
