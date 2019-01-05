@@ -49,5 +49,16 @@
       "tests",
       "**/*.spec.js"
     ]
-  }
+  },  
+  "keywords": [
+    "jpeg",
+    "png",
+    "image",
+    "resize",
+    "polygon-extract",
+    "sharp",
+    "express",
+    "express-middleware",
+    "express-image-server"
+  ]
 }
