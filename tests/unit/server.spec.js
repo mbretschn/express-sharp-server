@@ -118,6 +118,18 @@ describe('Image Resource', function () {
             });
     });
 
+    it('PUT non existing image userdata', function (done) {
+        chai.request(server)
+            .put(href + '!')
+            .set('Content-Type', 'application/json')
+            .send({ userdata: userdata })
+            .end((err, res) => {
+                res.should.have.status(404);
+
+                done();
+            });
+    });
+
     it('GET image userdata', function (done) {
         chai.request(server)
             .get(href)
