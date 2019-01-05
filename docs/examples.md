@@ -1,6 +1,6 @@
 # express-sharp-server 
 
-### examples
+### Examples
 
 The following examples are done in the following image found at Wikimedia Commons
 

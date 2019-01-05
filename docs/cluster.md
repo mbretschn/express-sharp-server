@@ -1,8 +1,8 @@
 # express-sharp-server 
 
-### Clustered Enviroment
+### Cluster
 
-It is possible to use the middleware in a clustered enviroment, where a number of express servers are started. express-sharp-server middleware can be used in a clustered enviroment. However, the caching mechanism needs to be prepared for this purpose, because a asynchronous cache creation can leed into race conditions. To deal with this, the Caching funtionality must started in the master as well as in the worker scope. 
+It is possible to use the middleware in a clustered enviroment, where a number of express servers are started. express-sharp-server middleware can be used in a clustered enviroment. However, the caching mechanism needs to be prepared for this purpose, because a asynchronous cache creation can leed into race conditions. To deal with this, the caching funtionality must be started in the master as well as in the worker scope. 
 
 ### Server
 
