@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/3epnm/express-sharp-server.svg?branch=master)](https://travis-ci.org/3epnm/express-sharp-server) [![Coverage Status](https://coveralls.io/repos/github/3epnm/express-sharp-server/badge.svg?branch=master)](https://coveralls.io/github/3epnm/express-sharp-server?branch=master) [![Known Vulnerabilities](https://snyk.io/test/github/3epnm/express-sharp-server/badge.svg)](https://snyk.io/test/github/3epnm/express-sharp-server) 
 
-express-sharp-server is a middleware that implements a restful image server based on node-sharp.
+express-sharp-server is a middleware that offers a restful image server based on [node-sharp](https://github.com/lovell/sharp).
 
 ```sh
 npm install express-sharp-server
@@ -10,7 +10,7 @@ npm install express-sharp-server
 
 express-sharp-server is an evolving express middleware to implement an easy-to-use image server, with a focus on extraction of image parts. The goal is to provide all prominent functions of the node-sharp library in a express middleware.
 
-### Example Server
+### Server
 
 ```javascript
 const express = require('express');
@@ -28,9 +28,24 @@ server.use(image({
 server.listen(8080);
 ```
 
+express-sharp-server supports running in a node cluster enviroment, which improves the performance considerably. See [cluster](docs/cluster.md)
+
+### Options
+
+The following options can be set:
+
+| Parameter 	| Description    	    |
+|-----------	|-----------        |
+| base_route  	| The base_route is used to configure the endpoint, where the middleware listen. Defaults to ```'/'```. |
+| base_url  	| The base_url is a prefix for the image urls generated in the json responce ```_links.self.href``` useful if the server is behind a proxy. Defaults to ```'/'```. 	            |
+| data_dir      | The data_dir is used to save the upload and cache files. If upload_dir is not set, ```data_dir + '/upload/'``` is created for uploads, If cache_dir is not set, ```data_dir + '/cache/'``` is used. Mandatory, if upload_dir or cache_dir is not set.               |
+| upload_dir 	| The directory where the image uploads to be saved. Optional. |
+| cache_dir 	| The directory where the image cache to be saved. Optional.   |
+| logger 	    | optional, a instance to winston logger. Optional.                |
+
 ### Basic Usage
 
-First of all, when the server is started, pictures can be uploaded.
+First of all, images can be uploaded.
 
 ```sh
 curl -F "Document=@elefants.jpg" http://localhost:8080
@@ -55,7 +70,7 @@ curl --header "Content-Type: application/json" \
   http://localhost:8080/
 ```
 
-Then the server responds with the following payload in json.
+In any case, the server responds with the following payload in json.
 
 ```json
 {
@@ -78,118 +93,43 @@ Then the server responds with the following payload in json.
 }
 ```
 
-The image is now stored on the server and can now be retrieved via the url ``` _links.self.href ``` specified.
+The image is now stored on the server and can now be retrieved via the url specified as ``` _links.self.href ``` 
 
 ```sh
 curl http://localhost:8080/0c97f820639ecbbbba0255ceb7a5f962
 ```
 
-The underlying information on the server can be queried if in addition an "Accept: application / json" header is sent.
+The underlying information on the server can be queried if in addition an "Accept: application/json" header is sent.
 
 ```sh
 curl --header "Accept: application/json" \
     http://localhost:8080/0c97f820639ecbbbba0255ceb7a5f962
 ```
 
-The latter can be extended, vie a HTTP PUT request, by user data. Useful to save image license information.
 
-```json
-{
-    "userdata": {
-        "license": {
-            "label": "CC BY-SA 4.0",
-            "href": "https://creativecommons.org/licenses/by-sa/4.0",
-            "attribution": "Ggerdel at Wikimedia Commons"
-        }
-    }
-}
-```
-
-```sh
-curl --header "Content-Type: application/json" \
-  --request PUT \
-  --data '{ "userdata": { "license": { "label": "CC BY-SA 4.0", "href": "https://creativecommons.org/licenses/by-sa/4.0", "attribution": "Ggerdel at Wikimedia Commons" } } } ' \
-  http://localhost:8080/
-```
+It is possible to store userdata to an image resource, see [userdata](docs/userdata.md).
 
 ### Features
 
-The following examples are done in the following image found at Wikimedia Commons
-
-![elefants.jpg](tests/fixtures/elefants.jpg)
-
-[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0), Ggerdel at Wikimedia Commons
-
-#### Width and Height
-
-Request the Image with a specific width. The aspect ratio is retained.
-```sh
-curl http://localhost:8080/0c97f820639ecbbbba0255ceb7a5f962?width=400
-```
-
-![width](tests/fixtures/elefants-width.jpg)
-
-Request the Image with a specific height. The aspect ratio is retained.
-```sh
-curl http://localhost:8080/0c97f820639ecbbbba0255ceb7a5f962?height=200
-```
-
-![height](tests/fixtures/elefants-height.jpg)
-
-Request the Image with a specific width and height.
-```sh
-curl http://localhost:8080/0c97f820639ecbbbba0255ceb7a5f962?width=400&height=200
-```
-
-![width and height](tests/fixtures/elefants-widthheight.jpg)
-
-#### Extract part of image with polygon parameter
-
-Simple rectangular extraction, without any rotation of the segment.
-```sh
-curl http://localhost:8080/0c97f820639ecbbbba0255ceb7a5f962 \
-  ?polygon=[{x:421,y:264},{x:755,y:264},{x:755,y:453},{x:421,y:453}]
-```
-
-![rect](tests/fixtures/elefants-rect-norotate.jpg)
-
-
-Simple rectangular extraction, with rotation of the segment.
-```sh
-curl http://localhost:8080/0c97f820639ecbbbba0255ceb7a5f962 \
-  ?polygon=[{x:348,y:447},{x:505,y:599},{x:380,y:727},{x:224,y:576}]&rotation=315.94
-```
-
-![rotate](tests/fixtures/elefants-rect-rotate.jpg)
-
-Extraction of a more complex shape
-```sh
-curl http://localhost:8080/0c97f820639ecbbbba0255ceb7a5f962 \
-  ?polygon=[{x:467,y:631},{x:490,y:612},{x:514,y:612},{x:541,y:594},{x:549,y:563},{x:576,y:532},{x:612,y:513},{x:647,y:506},{x:696,y:522},{x:728,y:550},{x:741,y:584},{x:739,y:603},{x:782,y:610},{x:766,y:635},{x:725,y:647},{x:704,y:652},{x:697,y:679},{x:657,y:688},{x:633,y:675},{x:571,y:653},{x:545,y:648},{x:508,y:635}]
-```
-
-![polygon](tests/fixtures/elefants-polygon.jpg)
-
-#### Extension of the resulting image, if polygon parameter is outside of image
-
-```sh
-curl http://localhost:8080/0c97f820639ecbbbba0255ceb7a5f962 \
-  ?polygon=[{x:-58,y:-54},{x:397,y:-54},{x:397,y:420},{x:-58,y:420}]
-```
-
-![topleft](tests/fixtures/elefants-extend-topleft.jpg)
-
-### Options
-
-The following options can be set:
+The following parameter can be mixed.
 
 | Parameter 	| Comment    	|
 |-----------	|-----------    |
-| base_route  	| ...	|
-| base_url  	| ...  	|
-| upload_dir 	| The directory where the image uploads should be saved |
-| cache_dir 	| The directory where the image cache should be saved |
-| logger 	    | optional, a instance to winston logger 	|
+| width  	    | The width of the image, The aspect ratio is retained if no height parameter is present.	        |
+| height  	    | The height of the image, The aspect ratio is retained if no width parameter is present.  	        |
+| polygon 	    | Can be used to extract a partion of the image. If the Polygon is not recangular, the oferlapping parts of the source image are masked with a uniform color.           |
+| rotation 	    | Rotation of the extracted image.           |
+| grayscale 	| Remove color from the image. 	        |
+
+See [examples](docs/examples.md) for more information.
+
+### Todos
+
+The [node-sharp](https://github.com/lovell/sharp) library offers far more useful features, than this middleware currently implements. In the future, more of its functionality will be implemented in express-sharp-server.
+
+The Caching functionality, even if it supports worker, ist very simple and can be improved in future.
+
+Finally, there is no method to remove a image resource, or list all available resources. This is the next functionality to implement.
 
 ### Tests
 
