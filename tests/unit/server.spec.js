@@ -635,38 +635,42 @@ describe('Image Resource', function () {
     });
 
     it('GET image width & grayscale from cache', function (done) {
-        chai.request(server)
-            .get(href + '?' + fingerprints[11].query)
-            .end((err, res) => {
-                res.should.have.status(200);
+        setTimeout(() => {
+            chai.request(server)
+                .get(href + '?' + fingerprints[11].query)
+                .end((err, res) => {
+                    res.should.have.status(200);
 
-                fingerprint(res.body, (err, info) => {
-                    chai.expect(info).to.equal(fingerprints[11].chksum);
-                    done();
+                    fingerprint(res.body, (err, info) => {
+                        chai.expect(info).to.equal(fingerprints[11].chksum);
+                        done();
+                    });
                 });
-            });
+        }, 1000);
     });
 
     it('GET image width & grayscale info from cache', function (done) {
-        chai.request(server)
-            .get(href + '?' + fingerprints[11].query)
-            .set('Accept', 'application/json')
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.body.should.be.a('object');
-                res.body.should.have.property('_links');
-                res.body._links.should.have.property('self');
-                res.body._links.self.should.have.property('href').eql(href + '?' + fingerprints[11].query);
-                res.body.should.have.property('metadata');
-                res.body.metadata.should.have.property('width').eql(400);
-                res.body.metadata.should.have.property('height').eql(267);
-                res.body.should.have.property('userdata');
-                res.body.userdata.should.have.property('license');
-                res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
-                res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
-                res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
-                done();
-            });    
+        setTimeout(() => {
+            chai.request(server)
+                .get(href + '?' + fingerprints[11].query)
+                .set('Accept', 'application/json')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('_links');
+                    res.body._links.should.have.property('self');
+                    res.body._links.self.should.have.property('href').eql(href + '?' + fingerprints[11].query);
+                    res.body.should.have.property('metadata');
+                    res.body.metadata.should.have.property('width').eql(400);
+                    res.body.metadata.should.have.property('height').eql(267);
+                    res.body.should.have.property('userdata');
+                    res.body.userdata.should.have.property('license');
+                    res.body.userdata.license.should.have.property('label').eql(userdata.license.label);
+                    res.body.userdata.license.should.have.property('href').eql(userdata.license.href);
+                    res.body.userdata.license.should.have.property('attribution').eql(userdata.license.attribution);  
+                    done();
+                });   
+        }, 1000); 
     }); 
 
     it('GET non existing image', function (done) {
