@@ -23,7 +23,8 @@
     "request-promise-native": "^1.0.5",
     "sharp": "^0.21.0",
     "underscore": "^1.9.1",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
@@ -42,14 +43,16 @@
   "scripts": {
     "start": "SET NODE_ENV=dev && node test/server.js",
     "test": "mocha --exit tests/unit",
-    "test-ci": "nyc mocha --exit tests/unit && nyc report --reporter=text-lcov | coveralls"
+    "test-ci": "nyc mocha --exit tests/unit && nyc report --reporter=text-lcov | coveralls",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "nyc": {
     "exclude": [
       "tests",
       "**/*.spec.js"
     ]
-  },  
+  },
   "keywords": [
     "jpeg",
     "png",
@@ -60,5 +63,6 @@
     "express",
     "express-middleware",
     "express-image-server"
-  ]
+  ],
+  "snyk": true
 }
